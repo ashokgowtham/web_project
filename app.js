@@ -7,6 +7,7 @@ var logger = require('morgan');
 var router = express.Router();
 
 var app = express();
+var store = require('json-fs-store')('./data');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -18,33 +19,51 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-var books = [{
-    name:"C programming",
-    author:"Author1",
-    description:"Some Description",
-    price:"25",
-    available_quantity:"10",
-}, {
-    name:"Python",
-    author:"Author1",
-    description:"Some Description",
-    price:"30",
-    available_quantity:"20",
-}, {
-    name:"Typescript",
-    author:"Author2",
-    description:"Some other Description",
-    price:"10",
-    available_quantity:"5",
-}];
+store.add({
+        id: 1,
+        name:"C programming",
+        author:"Author1",
+        description:"Some Description",
+        price:"25",
+        available_quantity:"10",
+    }, function (err) {
+        if (err) {
+            throw err;
+        }
+    });
+store.add({
+        id: 2,
+        name:"Python",
+        author:"Author1",
+        description:"Some Description",
+        price:"30",
+        available_quantity:"20",
+    }, function (err) {
+        if (err) {
+            throw err;
+        }
+    });
+store.add({
+        id: 3,
+        name:"Typescript",
+        author:"Author2",
+        description:"Some other Description",
+        price:"10",
+        available_quantity:"5",
+    }, function (err) {
+        if (err) {
+            throw err;
+        }
+    });
 
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
 router.get('/books', function(req, res, next) {
-  res.render('books_view', { count: books.length, books: books});
+  store.list(function (err, books) {
+    res.render('books_view', { count: books.length, books: books});
+  });
 });
 
 
@@ -54,20 +73,36 @@ router.get('/new_book', function(req, res, next) {
 
 router.post('/new_book', function(req, res, next) {
   console.log(req.body);
-  books.push(req.body);
-  res.render('new_book', {});
+  var book = req.body;
+
+  store.list(function(err, books) {
+    book.id = books.length + 1;
+    store.add(req.body, function (err) {
+      if (err){
+        throw err;
+      }
+      res.render('new_book', {});
+    });
+  });
+
 });
 
 router.post('/borrow_book', function(req, res, next) {
   console.log(req.body);
-
-  for(var i=0; i<books.length; i++) {
-    if(books[i].name == req.body.book_name) {
-        books[i].available_quantity = books[i].available_quantity - 1;
+  store.list(function (err, books) {
+    console.log(books);
+    for(var i=0; i<books.length; i++) {
+      var book = books[i];
+      if(book.name == req.body.book_name) {
+          book.available_quantity = book.available_quantity - 1;
+          store.add(book, function (err) {
+            if (err) throw err;
+            res.render('books_view', { count: books.length, books: books});
+          });
+      }
     }
-  }
 
-  res.render('books_view', { count: books.length, books: books});
+  });
 });
 
 
