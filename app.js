@@ -48,6 +48,17 @@ router.get('/books', function(req, res, next) {
 });
 
 
+router.get('/new_book', function(req, res, next) {
+  res.render('new_book', {});
+});
+
+router.post('/new_book', function(req, res, next) {
+  console.log(req.body);
+  books.push(req.body);
+  res.render('new_book', {});
+});
+
+
 
 
 
