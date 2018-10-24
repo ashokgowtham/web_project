@@ -18,9 +18,40 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+var books = [{
+    name:"C programming",
+    author:"Author1",
+    description:"Some Description",
+    price:"25",
+    available_quantity:"10",
+}, {
+    name:"Python",
+    author:"Author1",
+    description:"Some Description",
+    price:"30",
+    available_quantity:"20",
+}, {
+    name:"Typescript",
+    author:"Author2",
+    description:"Some other Description",
+    price:"10",
+    available_quantity:"5",
+}];
+
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+
+router.get('/books', function(req, res, next) {
+  res.render('books_view', { count: books.length, books: books});
+});
+
+
+
+
+
+
 
 app.use(router);
 
