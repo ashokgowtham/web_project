@@ -58,6 +58,18 @@ router.post('/new_book', function(req, res, next) {
   res.render('new_book', {});
 });
 
+router.post('/borrow_book', function(req, res, next) {
+  console.log(req.body);
+
+  for(var i=0; i<books.length; i++) {
+    if(books[i].name == req.body.book_name) {
+        books[i].available_quantity = books[i].available_quantity - 1;
+    }
+  }
+
+  res.render('books_view', { count: books.length, books: books});
+});
+
 
 
 

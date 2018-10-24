@@ -13,6 +13,7 @@
         <th>Description</th>
         <th>Price</th>
         <th>Quantity Available</th>
+        <th></th>
     </tr>
     <% for(book of books) { %>
     <tr>
@@ -30,6 +31,12 @@
         </td>
         <td>
             <%= book.available_quantity %>
+        </td>
+        <td>
+            <form action="/borrow_book" method="POST">
+                <input type="text" name="book_name" value="<%= book.name %>" hidden="true">
+                <input type="submit">
+            </form>
         </td>
     </tr>
     <% } %>
