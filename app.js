@@ -19,42 +19,42 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-store.add({
-        id: 1,
-        name:"C programming",
-        author:"Author1",
-        description:"Some Description",
-        price:"25",
-        available_quantity:"10",
-    }, function (err) {
-        if (err) {
-            throw err;
-        }
-    });
-store.add({
-        id: 2,
-        name:"Python",
-        author:"Author1",
-        description:"Some Description",
-        price:"30",
-        available_quantity:"20",
-    }, function (err) {
-        if (err) {
-            throw err;
-        }
-    });
-store.add({
-        id: 3,
-        name:"Typescript",
-        author:"Author2",
-        description:"Some other Description",
-        price:"10",
-        available_quantity:"5",
-    }, function (err) {
-        if (err) {
-            throw err;
-        }
-    });
+// store.add({
+//         id: 1,
+//         name:"C programming",
+//         author:"Author1",
+//         description:"Some Description",
+//         price:"25",
+//         available_quantity:"10",
+//     }, function (err) {
+//         if (err) {
+//             throw err;
+//         }
+//     });
+// store.add({
+//         id: 2,
+//         name:"Python",
+//         author:"Author1",
+//         description:"Some Description",
+//         price:"30",
+//         available_quantity:"20",
+//     }, function (err) {
+//         if (err) {
+//             throw err;
+//         }
+//     });
+// store.add({
+//         id: 3,
+//         name:"Typescript",
+//         author:"Author2",
+//         description:"Some other Description",
+//         price:"10",
+//         available_quantity:"5",
+//     }, function (err) {
+//         if (err) {
+//             throw err;
+//         }
+//     });
 
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
