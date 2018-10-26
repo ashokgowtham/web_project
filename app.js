@@ -3,8 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var WebSocket = require('ws');
 
 var router = express.Router();
+var wss = new WebSocket.Server({ noServer: true });
 
 var app = express();
 var store = require('json-fs-store')('./data');
@@ -105,7 +107,18 @@ router.post('/borrow_book', function(req, res, next) {
   });
 });
 
+wss.on('connection', function connection(ws) {
+  ws.on('message', function (data) {
+    console.log('message from client', data);
+    // handle incoming messages from client
 
+    // send message to client
+    // ws.send(data);
+    for( client of wss.clients) {
+      client.send(data);
+    }
+  });
+});
 
 
 
@@ -128,5 +141,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+app.wss = wss;
 
 module.exports = app;

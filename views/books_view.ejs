@@ -33,13 +33,33 @@
             <%= book.available_quantity %>
         </td>
         <td>
-            <form action="/borrow_book" method="POST">
+            <form action="/borrow_book" method="POST" class="borrow-form">
                 <input type="text" name="book_name" value="<%= book.name %>" hidden="true">
-                <input type="submit">
+                <input type="submit" value="Borrow" class="submit-button">
             </form>
         </td>
     </tr>
     <% } %>
     </table>
+    <script type="text/javascript">
+        var ws = new WebSocket("ws://localhost:3000/ws");
+
+        ws.onmessage = function(message) {
+            console.log("message from server: ");
+            console.log(message.data);
+            if(message.data == 'book borrowed') {
+                window.location.reload();
+            }
+        }
+
+        function borrow (event) {
+            console.log('websocket message sent: "book borrowed"');
+            ws.send('book borrowed');
+        }
+
+        for (borrowForm of document.getElementsByClassName('borrow-form')) {
+            borrowForm.onsubmit = borrow;
+        }
+    </script>
   </body>
 </html>
