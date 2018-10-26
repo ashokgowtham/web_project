@@ -48,7 +48,7 @@
         } else {
             protocol = "ws"
         }
-        var ws = new WebSocket(protocol + "://" + location.hostname + ":" + <%= port %> + "/ws");
+        var ws = new WebSocket(protocol + "://" + location.host + "/ws");
 
         ws.onmessage = function(message) {
             console.log("message from server: ");
