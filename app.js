@@ -117,7 +117,9 @@ wss.on('connection', function connection(ws) {
     // send message to client
     // ws.send(data);
     for( client of wss.clients) {
-      client.send(data);
+      if (client !== ws) {
+        client.send(data);
+      }
     }
   });
 });
