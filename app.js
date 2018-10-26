@@ -11,6 +11,8 @@ var wss = new WebSocket.Server({ noServer: true });
 var app = express();
 var store = require('json-fs-store')('./data');
 
+var listen_port = process.env.PORT || 3000;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -64,7 +66,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/books', function(req, res, next) {
   store.list(function (err, books) {
-    res.render('books_view', { count: books.length, books: books});
+    res.render('books_view', { port: listen_port, count: books.length, books: books});
   });
 });
 
@@ -99,7 +101,7 @@ router.post('/borrow_book', function(req, res, next) {
           book.available_quantity = book.available_quantity - 1;
           store.add(book, function (err) {
             if (err) throw err;
-            res.render('books_view', { count: books.length, books: books});
+            res.render('books_view', { port: listen_port, count: books.length, books: books});
           });
       }
     }

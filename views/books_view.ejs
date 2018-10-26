@@ -42,7 +42,7 @@
     <% } %>
     </table>
     <script type="text/javascript">
-        var ws = new WebSocket("ws://localhost:3000/ws");
+        var ws = new WebSocket("ws://localhost:" + <%= port %> + "/ws");
 
         ws.onmessage = function(message) {
             console.log("message from server: ");
