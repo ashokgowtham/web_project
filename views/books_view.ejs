@@ -42,7 +42,13 @@
     <% } %>
     </table>
     <script type="text/javascript">
-        var ws = new WebSocket("ws://" + location.hostname + ":" + <%= port %> + "/ws");
+        var protocol;
+        if(window.location.href.startsWith('https')) {
+            protocol = "wss"
+        } else {
+            protocol = "ws"
+        }
+        var ws = new WebSocket(protocol + "://" + location.hostname + ":" + <%= port %> + "/ws");
 
         ws.onmessage = function(message) {
             console.log("message from server: ");
